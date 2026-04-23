@@ -1,4 +1,5 @@
-const BASE_URL = import.meta.env.VITE_API_URL + "/api";
+const BASE_URL =
+    (import.meta.env.VITE_API_URL || "https://mental-wellness-chatbot-zsdy.onrender.com") + "/api";
 
 // ── Token helpers ─────────────────────────────────────────────────────────────
 export const getToken = () => localStorage.getItem("token");
