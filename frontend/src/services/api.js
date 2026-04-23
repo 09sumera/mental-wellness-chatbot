@@ -1,4 +1,4 @@
-const BASE_URL = "/api";
+const BASE_URL = import.meta.env.VITE_API_URL + "/api";
 
 // ── Token helpers ─────────────────────────────────────────────────────────────
 export const getToken = () => localStorage.getItem("token");
@@ -37,27 +37,15 @@ async function request(endpoint, options = {}, retries = 2) {
                 continue;
             }
             if (isNetworkError) {
-                throw new Error("Cannot reach backend. Make sure the Flask server is running on port 5000.");
+                throw new Error("Cannot reach backend.");
             }
             throw err;
         }
     }
 }
 
-// ── Health check (use to wait for backend) ────────────────────────────────────
+// ── Health check ──────────────────────────────────────────────────────────────
 export const healthCheck = () => request("/health");
-
-export async function waitForBackend(maxAttempts = 10) {
-    for (let i = 0; i < maxAttempts; i++) {
-        try {
-            await healthCheck();
-            return true;
-        } catch {
-            await sleep(1000);
-        }
-    }
-    return false;
-}
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
 export const authAPI = {
@@ -109,4 +97,4 @@ export const moodAPI = {
     getHistory: () => request("/mood/history"),
 
     getSummary: () => request("/mood/summary"),
-};
+};
