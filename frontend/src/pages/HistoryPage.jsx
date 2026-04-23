@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getToken } from "../services/api";
+import { chatAPI } from "../services/api";
 
 export default function HistoryPage() {
   const [history, setHistory] = useState([]);
@@ -8,17 +8,7 @@ export default function HistoryPage() {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const token = getToken();
-
-        const res = await fetch("/api/chat/history", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          }
-        });
-
-        const data = await res.json();
+        const data = await chatAPI.getHistory();
 
         if (data.history) {
           setHistory(data.history);

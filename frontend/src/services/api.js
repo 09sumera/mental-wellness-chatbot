@@ -51,6 +51,9 @@ export const healthCheck = () => request("/health");
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
 export const authAPI = {
+    requestOtp: (payload) =>
+        request("/user/request-otp", { method: "POST", body: JSON.stringify(payload) }),
+
     register: (payload) =>
         request("/user/register", { method: "POST", body: JSON.stringify(payload) }),
 

@@ -5,6 +5,7 @@ import DashboardPage from "./pages/Dashboard";
 import ResourcesPage from "./pages/Resources";
 import MoodPage from "./pages/MoodPage";
 import Navbar from "./components/Navbar";
+import { authAPI } from "./services/api";
 import "./styles/main.css";
 
 export default function App() {
@@ -24,19 +25,10 @@ export default function App() {
     if (!email) return setAuthError("Email is required.");
     setIsLoading(true);
     try {
-      const res = await fetch("/api/user/request-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: email })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setSignupStep(2);
-      } else {
-        setAuthError(data.error);
-      }
+      await authAPI.requestOtp({ username: email });
+      setSignupStep(2);
     } catch (err) {
-      setAuthError("Server error.");
+      setAuthError(err.message || "Server error.");
     } finally {
       setIsLoading(false);
     }
@@ -47,22 +39,13 @@ export default function App() {
     if (!email || !password || !name || !otp) return setAuthError("All fields are required.");
     setIsLoading(true);
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL || "https://mental-wellness-chatbot-zsdy.onrender.com"}/api/user/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username: email, name, password, otp })
-        });
-      const data = await res.json();
-      if (res.ok) {
+      const data = await authAPI.register({ username: email, name, password, otp });
+      if (data.token) {
         localStorage.setItem("token", data.token);
         setToken(data.token);
-      } else {
-        setAuthError(data.error);
       }
     } catch (err) {
-      setAuthError("Server error.");
+      setAuthError(err.message || "Server error.");
     } finally {
       setIsLoading(false);
     }
@@ -73,20 +56,12 @@ export default function App() {
     if (!email || !password) return setAuthError("Email and password required.");
     setIsLoading(true);
     try {
-      const res = await fetch("/api/user/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: email, password })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        localStorage.setItem("token", data.token);
+      const data = await authAPI.login({ username: email, password });
+      if (data.token) {
         setToken(data.token);
-      } else {
-        setAuthError(data.error);
       }
     } catch (err) {
-      setAuthError("Server error.");
+      setAuthError(err.message || "Server error.");
     } finally {
       setIsLoading(false);
     }
