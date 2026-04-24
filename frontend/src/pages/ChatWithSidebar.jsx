@@ -60,23 +60,23 @@ export default function ChatWithSidebar() {
 
   return (
     <div style={styles.container} className="flex h-screen w-full relative overflow-hidden bg-transparent">
-      {/* Mobile & Tablet Backdrop */}
+      {/* Mobile Backdrop */}
       {isSidebarOpen && (
         <div 
-          className="fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-sm transition-opacity"
+          className="fixed inset-0 bg-black/50 md:hidden z-40 transition-opacity"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar Container */}
-      <div className={`fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+      <div className={`fixed top-0 left-0 h-full w-64 z-50 transform transition-transform duration-300 ease-in-out md:static md:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
         <Sidebar onSelectChat={(id) => { setChatId(id); setIsSidebarOpen(false); }} currentChatId={chatId} />
       </div>
       
       <div style={styles.chatArea} className="flex-1 flex flex-col relative w-full min-w-0">
         <div className="glass-panel flex w-full items-center px-4 sm:px-6 md:px-8" style={styles.header}>
           <button 
-            className="lg:hidden mr-4 p-2 text-gray-300 hover:text-white rounded-md transition-colors"
+            className="md:hidden mr-4 p-2 text-gray-300 hover:text-white rounded-md transition-colors"
             onClick={() => setIsSidebarOpen(true)}
             aria-label="Open sidebar"
           >
