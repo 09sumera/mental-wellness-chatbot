@@ -7,6 +7,7 @@ export default function ChatWithSidebar() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const bottomRef = useRef(null);
 
   // Load selected conversation history
@@ -58,12 +59,32 @@ export default function ChatWithSidebar() {
   };
 
   return (
-    <div style={styles.container}>
-      <Sidebar onSelectChat={(id) => setChatId(id)} currentChatId={chatId} />
+    <div style={styles.container} className="flex h-screen w-full relative overflow-hidden bg-transparent">
+      {/* Mobile & Tablet Backdrop */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-sm transition-opacity"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar Container */}
+      <div className={`fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <Sidebar onSelectChat={(id) => { setChatId(id); setIsSidebarOpen(false); }} currentChatId={chatId} />
+      </div>
       
-      <div style={styles.chatArea}>
-        <div className="glass-panel" style={styles.header}>
-          <h2 style={{ margin: "0", fontSize: "16px", fontWeight: "600", color: "var(--text-primary)" }}>
+      <div style={styles.chatArea} className="flex-1 flex flex-col relative w-full min-w-0">
+        <div className="glass-panel flex w-full items-center px-4 sm:px-6 md:px-8" style={styles.header}>
+          <button 
+            className="lg:hidden mr-4 p-2 text-gray-300 hover:text-white rounded-md transition-colors"
+            onClick={() => setIsSidebarOpen(true)}
+            aria-label="Open sidebar"
+          >
+            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <h2 style={{ margin: "0", fontSize: "16px", fontWeight: "600", color: "var(--text-primary)" }} className="flex-1 text-center lg:text-left pr-10 lg:pr-0">
             {chatId ? "Conversation" : "New Chat"}
           </h2>
         </div>
@@ -111,7 +132,7 @@ export default function ChatWithSidebar() {
                   </div>
                 )}
 
-                <div style={{
+                <div className="max-w-full sm:max-w-md md:max-w-xl lg:max-w-2xl px-2 sm:px-0" style={{
                     ...styles.messageInner,
                     ...(isUser ? styles.innerUser : styles.innerBot),
                     margin: !isUser && emotion ? "8px 0 0 0" : "0"
@@ -123,7 +144,7 @@ export default function ChatWithSidebar() {
                   )}
                   
                   <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                    <div style={{
+                    <div className="text-sm md:text-base lg:text-lg break-words" style={{
                         ...styles.bubble,
                         ...(isUser ? styles.bubbleUser : styles.bubbleBot)
                     }}>
@@ -161,8 +182,8 @@ export default function ChatWithSidebar() {
           <div ref={bottomRef} style={{height: "30px"}} />
         </div>
 
-        <div style={styles.inputArea}>
-          <div className="glass-panel" style={styles.inputWrapper}>
+        <div style={styles.inputArea} className="w-full px-4 sm:px-6 md:px-8">
+          <div className="glass-panel w-full sm:max-w-md md:max-w-2xl lg:max-w-3xl" style={styles.inputWrapper}>
             <input
               style={styles.input}
               placeholder="Send a message..."
@@ -224,7 +245,6 @@ const styles = {
     margin: "auto",
     color: "var(--text-primary)",
     textAlign: "center",
-    maxWidth: "400px",
   },
   emptyIcon: {
     fontSize: "48px",
@@ -233,12 +253,11 @@ const styles = {
   messageRow: {
     display: "flex",
     width: "100%",
-    padding: "8px 20px",
+    padding: "8px 12px md:padding-8px-20px",
   },
   messageInner: {
     display: "flex",
-    maxWidth: "800px",
-    gap: "16px",
+    gap: "12px",
     alignItems: "flex-end",
   },
   innerUser: {
@@ -281,7 +300,7 @@ const styles = {
       backdropFilter: "blur(10px)",
   },
   inputArea: {
-    padding: "20px 40px",
+    padding: "20px 0", // responsive padding via classes
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -289,7 +308,7 @@ const styles = {
   },
   inputWrapper: {
     width: "100%",
-    maxWidth: "800px",
+    // maxWidth handled via responsive classes
     position: "relative",
     display: "flex",
     alignItems: "center",
@@ -343,12 +362,12 @@ const styles = {
     borderRadius: "12px",
     padding: "12px 16px",
     marginBottom: "4px",
-    marginLeft: "52px", // align with bubble ignoring avatar
-    maxWidth: "80%",
-    minWidth: "250px",
+    marginLeft: "48px", // align with bubble ignoring avatar
+    maxWidth: "100%",
     color: "var(--text-primary)",
     fontFamily: "var(--font-body)",
     fontSize: "13px",
+    overflowX: "hidden",
   },
   reasoningTitle: {
     fontWeight: "bold",

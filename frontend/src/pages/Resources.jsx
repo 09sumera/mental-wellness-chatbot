@@ -244,7 +244,7 @@ const styles = {
     copingTitle: { fontSize: "18px", color: "var(--text-primary)", fontWeight: "600" },
     copingDesc: { fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.6 },
 
-    catGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: "16px" },
+    catGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "16px" },
     catCard: { overflow: "hidden" },
     catHeader: {
         width: "100%", background: "none", border: "none", cursor: "pointer",

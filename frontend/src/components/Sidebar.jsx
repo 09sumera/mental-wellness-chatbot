@@ -106,7 +106,7 @@ export default function Sidebar({ onSelectChat, currentChatId }) {
   );
 
   return (
-    <div className="glass-panel" style={styles.sidebar}>
+    <div className="glass-panel h-full w-4/5 max-w-sm sm:w-80 lg:w-72 flex-shrink-0" style={styles.sidebar}>
 
       <div style={{ marginBottom: "16px", padding: "0 8px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -266,7 +266,7 @@ export default function Sidebar({ onSelectChat, currentChatId }) {
 
 const styles = {
   sidebar: {
-    width: "280px",
+    // Width handled via Tailwind classes for responsiveness
     background: "rgba(10, 16, 21, 0.4)",
     display: "flex",
     flexDirection: "column",
