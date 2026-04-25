@@ -1,58 +1,140 @@
-# AI Mental Health and Wellness Chatbot
+# 🌿 Serenova — Mental Wellness Chatbot
 
-An AI-powered chatbot designed to support mental wellness by detecting user mood and providing supportive responses.
+Serenova is an AI-powered mental wellness chatbot that provides a safe, supportive space for users to express their thoughts and receive intelligent, empathetic responses.
 
-## Features
+---
 
-- AI chatbot conversation
-- Sentiment analysis
-- Crisis detection
-- Mood tracking
-- Simple analytics dashboard
+## ✨ Features
 
-## Tech Stack
+* 💬 Real-time AI chat support
+* 🧠 Emotion-aware responses
+* 🔐 User Authentication (Login & Signup)
+* 🧾 Chat history (user-specific)
+* 📱 Fully responsive (desktop + mobile)
+* 🌙 Clean, modern UI
 
-Frontend
-- React
-- HTML / CSS
-- JavaScript
+---
 
-Backend
-- Python Flask
-- REST API
+## 📱 UI Behavior
 
-AI
-- Sentiment Analysis
-- Crisis Detection
+### 🖥️ Desktop
 
-## Project Structure
+* Sidebar on the **left**
+* Chat interface on the **right**
+* Side-by-side layout
 
-mental-wellness-chatbot
-├── frontend
-├── backend
-├── ai
-├── data
-├── docs
-└── tests
+### 📱 Mobile
 
-## Setup Instructions
+* Chat screen only (full screen)
+* Sidebar hidden by default
+* ☰ menu button opens sidebar (like ChatGPT)
 
-### 1 Install dependencies
+---
 
+## 🔐 Authentication
+
+* Secure login & signup
+* Token/session-based authentication
+* Protected chat access per user
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+* React.js
+* Tailwind CSS
+* Vite
+
+### Backend
+
+* FastAPI (Python)
+* REST APIs
+
+### AI / Logic
+
+* NLP-based emotion detection
+* Context-aware response system
+
+---
+
+## 📁 Project Structure
+
+```
+mental-wellness-chatbot/
+│
+├── frontend/
+│   ├── components/
+│   ├── pages/
+│   ├── services/
+│   └── styles/
+│
+├── backend/
+│   ├── app.py
+│   ├── routes/
+│   ├── auth/
+│   └── models/
+│
+└── README.md
+```
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone Repository
+
+```
+git clone https://github.com/09sumera/mental-wellness-chatbot.git
+cd mental-wellness-chatbot
+```
+
+### 2. Frontend Setup
+
+```
 cd frontend
 npm install
+npm run dev
+```
 
+### 3. Backend Setup
+
+```
 cd backend
 pip install -r requirements.txt
-
-### 2 Run the application
-
-Start backend:
-cd backend
 python app.py
+```
 
-Start frontend:
-cd frontend
-npm run dev
+---
 
-Open http://localhost:5173 in your browser.
+## 🌐 Deployment
+
+* Frontend → Vercel
+* Backend → Render
+
+---
+
+## ⚠️ Disclaimer
+
+Serenova is not a substitute for professional mental health support.
+If you are in distress, please seek help from a qualified professional.
+
+---
+
+## 👩‍💻 Author
+
+**Sumera Anjum**
+
+---
+
+## 🌟 Future Improvements
+
+* 🎙 Voice interaction
+* 📊 Mood tracking dashboard
+* 🌍 Multi-language support
+* 🔐 OAuth login (Google / GitHub)
+
+---
+
+✨ *“Where your mind finds peace.”*
