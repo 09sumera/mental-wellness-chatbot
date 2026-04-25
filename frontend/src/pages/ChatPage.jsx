@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import Sidebar from "../components/Sidebar";
 import { chatAPI } from "../services/api";
 
 export default function ChatPage() {
@@ -53,9 +52,6 @@ export default function ChatPage() {
 
   return (
     <div style={styles.container}>
-      {/* 🔹 SIDEBAR (Shows one entry per conversation) */}
-      <Sidebar onSelectChat={(id) => setChatId(id)} currentChatId={chatId} />
-      
       {/* 🔹 CHAT AREA */}
       <div style={styles.chatArea}>
         <div style={styles.header}>

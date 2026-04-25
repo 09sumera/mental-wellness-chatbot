@@ -38,16 +38,16 @@ export default function ChatWithSidebar() {
 
     try {
       const res = await chatAPI.sendMessage(text, chatId);
-      const botMsg = { 
-          role: "assistant", 
-          message: res.reply,
-          emotion: res.emotion,
-          intensity: res.intensity,
-          topics: res.topics,
-          escalation: res.escalation
+      const botMsg = {
+        role: "assistant",
+        message: res.reply,
+        emotion: res.emotion,
+        intensity: res.intensity,
+        topics: res.topics,
+        escalation: res.escalation
       };
       setMessages((prev) => [...prev, botMsg]);
-      
+
       if (res.chat_id && res.chat_id !== chatId) {
         setChatId(res.chat_id);
       }
@@ -59,42 +59,49 @@ export default function ChatWithSidebar() {
   };
 
   return (
-    <div style={styles.container} className="flex h-screen w-full relative overflow-hidden bg-transparent">
+    <div className="flex h-screen w-full">
       {/* Mobile Backdrop */}
       {isSidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 md:hidden z-40 transition-opacity"
+        <div
+          className="fixed inset-0 bg-black/40 z-40 md:hidden transition-opacity"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
-      {/* Sidebar Container */}
-      <div className={`fixed top-0 left-0 h-full w-64 z-50 transform transition-transform duration-300 ease-in-out md:static md:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+      {/* Desktop Sidebar (hidden on mobile) */}
+      <div className="hidden md:block w-64 h-full flex-shrink-0">
+        <Sidebar onSelectChat={(id) => setChatId(id)} currentChatId={chatId} />
+      </div>
+
+      {/* Mobile Sidebar */}
+      <div
+        className={`fixed top-0 left-0 h-full w-64 z-50 md:hidden transition-transform duration-300 ease-in-out ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+      >
         <Sidebar onSelectChat={(id) => { setChatId(id); setIsSidebarOpen(false); }} currentChatId={chatId} />
       </div>
-      
-      <div style={styles.chatArea} className="flex-1 flex flex-col relative w-full min-w-0">
-        <div className="glass-panel flex w-full items-center px-4 sm:px-6 md:px-8" style={styles.header}>
-          <button 
+
+      {/* Chat Area */}
+      <div className="flex-1 flex flex-col w-full min-w-0">
+        <div className="glass-panel flex w-full items-center px-4 sm:px-6 md:px-8 sticky top-0 z-10 shrink-0" style={{ height: "60px" }}>
+          <button
             className="md:hidden mr-4 p-2 text-gray-300 hover:text-white rounded-md transition-colors"
             onClick={() => setIsSidebarOpen(true)}
             aria-label="Open sidebar"
           >
-            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+            <span style={{ fontSize: "20px" }}>☰</span>
           </button>
           <h2 style={{ margin: "0", fontSize: "16px", fontWeight: "600", color: "var(--text-primary)" }} className="flex-1 text-center lg:text-left pr-10 lg:pr-0">
             {chatId ? "Conversation" : "New Chat"}
           </h2>
         </div>
-        
-        <div style={styles.feed}>
+
+        <div className="flex-1 overflow-y-auto w-full flex flex-col py-5 px-0">
           {messages.length === 0 && (
             <div style={styles.empty} className="fade-in delay-200">
               <div style={styles.emptyIcon}>✨</div>
               <h2>How can I help you today?</h2>
-              <p style={{marginTop: "8px", color: "var(--text-muted)", fontSize: "14px"}}>Your secure space for reflection and support.</p>
+              <p style={{ marginTop: "8px", color: "var(--text-muted)", fontSize: "14px" }}>Your secure space for reflection and support.</p>
             </div>
           )}
           {messages.map((m, i) => {
@@ -103,18 +110,18 @@ export default function ChatWithSidebar() {
             const intensity = m.intensity || m.sentiment?.intensity;
             const topics = m.topics || m.sentiment?.topics;
             const escalation = m.escalation || m.sentiment?.escalation;
-            
+
             const EMOTION_EMOJI = {
-                joy: "😊", sadness: "😢", anxious: "😰", anxiety: "😰", anger: "😠",
-                calm: "😌", disgust: "😒", surprise: "😲", neutral: "💬", happy: "🌟", sad: "😔"
+              joy: "😊", sadness: "😢", anxious: "😰", anxiety: "😰", anger: "😠",
+              calm: "😌", disgust: "😒", surprise: "😲", neutral: "💬", happy: "🌟", sad: "😔"
             };
             const emoji = emotion ? (EMOTION_EMOJI[emotion.toLowerCase()] || "💬") : "";
 
             return (
-              <div 
-                key={i} 
+              <div
+                key={i}
                 style={{
-                  ...styles.messageRow, 
+                  ...styles.messageRow,
                   justifyContent: isUser ? "flex-end" : "flex-start",
                   flexDirection: "column",
                   alignItems: isUser ? "flex-end" : "flex-start"
@@ -133,33 +140,33 @@ export default function ChatWithSidebar() {
                 )}
 
                 <div className="max-w-full sm:max-w-md md:max-w-xl lg:max-w-2xl px-2 sm:px-0" style={{
-                    ...styles.messageInner,
-                    ...(isUser ? styles.innerUser : styles.innerBot),
-                    margin: !isUser && emotion ? "8px 0 0 0" : "0"
+                  ...styles.messageInner,
+                  ...(isUser ? styles.innerUser : styles.innerBot),
+                  margin: !isUser && emotion ? "8px 0 0 0" : "0"
                 }}>
                   {!isUser && (
-                    <div style={{...styles.avatar, background: "var(--teal-glow)", color: "var(--teal)", border: "1px solid var(--border)"}}>
+                    <div style={{ ...styles.avatar, background: "var(--teal-glow)", color: "var(--teal)", border: "1px solid var(--border)" }}>
                       <img src="/logo.png" alt="Serenova" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
                     </div>
                   )}
-                  
+
                   <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                     <div className="text-sm md:text-base lg:text-lg break-words" style={{
-                        ...styles.bubble,
-                        ...(isUser ? styles.bubbleUser : styles.bubbleBot)
+                      ...styles.bubble,
+                      ...(isUser ? styles.bubbleUser : styles.bubbleBot)
                     }}>
                       {m.message}
                     </div>
 
                     {!isUser && emotion && (
-                        <div style={styles.emotionBadge}>
-                           {emoji} <span style={{ textTransform: "capitalize" }}>{emotion}</span> {intensity ? `${intensity}/10` : ""}
-                        </div>
+                      <div style={styles.emotionBadge}>
+                        {emoji} <span style={{ textTransform: "capitalize" }}>{emotion}</span> {intensity ? `${intensity}/10` : ""}
+                      </div>
                     )}
                   </div>
 
                   {isUser && (
-                    <div style={{...styles.avatar, background: "rgba(255,255,255,0.1)", color: "var(--text-secondary)"}}>
+                    <div style={{ ...styles.avatar, background: "rgba(255,255,255,0.1)", color: "var(--text-secondary)" }}>
                       U
                     </div>
                   )}
@@ -168,21 +175,21 @@ export default function ChatWithSidebar() {
             );
           })}
           {loading && (
-            <div style={{...styles.messageRow, justifyContent: "flex-start"}} className="fade-in">
-              <div style={{...styles.messageInner, ...styles.innerBot}}>
-                <div style={{...styles.avatar, background: "var(--teal-glow)", color: "var(--teal)", border: "1px solid var(--border)"}}><img src="/logo.png" alt="Serenova" style={{ width: "20px", height: "20px", objectFit: "contain" }} /></div>
-                <div style={{...styles.bubble, ...styles.bubbleBot, display: "flex", gap: "6px", alignItems: "center"}}>
-                   <span style={{...styles.dot, animationDelay: "0ms"}} />
-                   <span style={{...styles.dot, animationDelay: "160ms"}} />
-                   <span style={{...styles.dot, animationDelay: "320ms"}} />
+            <div style={{ ...styles.messageRow, justifyContent: "flex-start" }} className="fade-in">
+              <div style={{ ...styles.messageInner, ...styles.innerBot }}>
+                <div style={{ ...styles.avatar, background: "var(--teal-glow)", color: "var(--teal)", border: "1px solid var(--border)" }}><img src="/logo.png" alt="Serenova" style={{ width: "20px", height: "20px", objectFit: "contain" }} /></div>
+                <div style={{ ...styles.bubble, ...styles.bubbleBot, display: "flex", gap: "6px", alignItems: "center" }}>
+                  <span style={{ ...styles.dot, animationDelay: "0ms" }} />
+                  <span style={{ ...styles.dot, animationDelay: "160ms" }} />
+                  <span style={{ ...styles.dot, animationDelay: "320ms" }} />
                 </div>
               </div>
             </div>
           )}
-          <div ref={bottomRef} style={{height: "30px"}} />
+          <div ref={bottomRef} style={{ height: "30px" }} />
         </div>
 
-        <div style={styles.inputArea} className="w-full px-4 sm:px-6 md:px-8">
+        <div className="w-full px-4 sm:px-6 md:px-8 shrink-0 flex flex-col items-center py-5" style={{ background: "linear-gradient(180deg, rgba(14,25,29,0) 0%, rgba(10,16,21,0.8) 100%)" }}>
           <div className="glass-panel w-full sm:max-w-md md:max-w-2xl lg:max-w-3xl" style={styles.inputWrapper}>
             <input
               style={styles.input}
@@ -191,9 +198,9 @@ export default function ChatWithSidebar() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSend()}
             />
-            <button 
-              style={{...styles.sendBtn, opacity: (!input.trim() || loading) ? 0.4 : 1}} 
-              onClick={handleSend} 
+            <button
+              style={{ ...styles.sendBtn, opacity: (!input.trim() || loading) ? 0.4 : 1 }}
+              onClick={handleSend}
               disabled={loading || !input.trim()}
             >
               ➤
@@ -207,40 +214,6 @@ export default function ChatWithSidebar() {
 }
 
 const styles = {
-  container: {
-    display: "flex",
-    height: "100vh",
-    width: "100%",
-    background: "transparent",
-    color: "var(--text-primary)",
-  },
-  chatArea: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    position: "relative",
-  },
-  header: {
-    height: "60px",
-    borderLeft: "none",
-    borderRight: "none",
-    borderTop: "none",
-    borderRadius: 0,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    position: "sticky",
-    top: 0,
-    zIndex: 10,
-    backgroundColor: "rgba(14, 25, 29, 0.4)",
-  },
-  feed: {
-    flex: 1,
-    overflowY: "auto",
-    display: "flex",
-    flexDirection: "column",
-    padding: "20px 0",
-  },
   empty: {
     margin: "auto",
     color: "var(--text-primary)",
@@ -261,10 +234,10 @@ const styles = {
     alignItems: "flex-end",
   },
   innerUser: {
-      flexDirection: "row",
+    flexDirection: "row",
   },
   innerBot: {
-      flexDirection: "row",
+    flexDirection: "row",
   },
   avatar: {
     width: "36px",
@@ -287,24 +260,17 @@ const styles = {
     boxShadow: "var(--shadow-sm)",
   },
   bubbleUser: {
-      background: "linear-gradient(135deg, var(--teal), #35b3aa)",
-      color: "#0a1015",
-      borderBottomRightRadius: "4px",
-      fontWeight: 500,
+    background: "linear-gradient(135deg, var(--teal), #35b3aa)",
+    color: "#0a1015",
+    borderBottomRightRadius: "4px",
+    fontWeight: 500,
   },
   bubbleBot: {
-      background: "var(--bg-input)",
-      color: "var(--text-primary)",
-      borderBottomLeftRadius: "4px",
-      border: "1px solid var(--border)",
-      backdropFilter: "blur(10px)",
-  },
-  inputArea: {
-    padding: "20px 0", // responsive padding via classes
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    background: "linear-gradient(180deg, rgba(14,25,29,0) 0%, rgba(10,16,21,0.8) 100%)",
+    background: "var(--bg-input)",
+    color: "var(--text-primary)",
+    borderBottomLeftRadius: "4px",
+    border: "1px solid var(--border)",
+    backdropFilter: "blur(10px)",
   },
   inputWrapper: {
     width: "100%",

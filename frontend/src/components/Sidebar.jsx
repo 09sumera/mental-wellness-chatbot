@@ -106,7 +106,7 @@ export default function Sidebar({ onSelectChat, currentChatId }) {
   );
 
   return (
-    <div className="glass-panel h-full w-full flex-shrink-0 border-r border-white/10" style={styles.sidebar}>
+    <div className="glass-panel h-full w-64 flex-shrink-0 border-r border-white/10" style={styles.sidebar}>
 
       <div style={{ marginBottom: "16px", padding: "0 8px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
