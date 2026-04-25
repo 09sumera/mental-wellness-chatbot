@@ -139,7 +139,7 @@ function CopingCard({ tech }) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function ResourcesPage() {
     return (
-        <div style={styles.page}>
+        <div style={styles.page} className="w-full max-w-full overflow-x-hidden px-4 sm:px-6">
             <div style={styles.inner}>
 
                 {/* Header */}
@@ -213,8 +213,8 @@ export default function ResourcesPage() {
 }
 
 const styles = {
-    page: { flex: 1, padding: "32px 24px", overflowY: "auto" },
-    inner: { maxWidth: "960px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "40px" },
+    page: { flex: 1, padding: "32px 0", overflowY: "auto", overflowX: "hidden" },
+    inner: { maxWidth: "960px", width: "100%", margin: "0 auto", display: "flex", flexDirection: "column", gap: "40px" },
 
     header: {},
     pageTitle: { color: "var(--text-primary)", marginBottom: "8px" },

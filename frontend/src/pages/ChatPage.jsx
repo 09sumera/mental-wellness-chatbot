@@ -55,9 +55,6 @@ export default function ChatPage() {
       {/* 🔹 CHAT AREA */}
       <div style={styles.chatArea}>
         <div style={styles.header}>
-          <h2 style={{ margin: "0", fontSize: "18px", color: "var(--text-primary, #333)" }}>
-            {chatId ? "Conversation" : "New Chat"}
-          </h2>
         </div>
         
         <div style={styles.feed}>

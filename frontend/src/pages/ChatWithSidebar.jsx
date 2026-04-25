@@ -10,7 +10,6 @@ export default function ChatWithSidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const bottomRef = useRef(null);
 
-  // Load selected conversation history
   useEffect(() => {
     if (chatId) {
       chatAPI.getConversation(chatId)
@@ -52,162 +51,127 @@ export default function ChatWithSidebar() {
         setChatId(res.chat_id);
       }
     } catch (e) {
-      setMessages((prev) => [...prev, { role: "assistant", message: "Error sending message." }]);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", message: "Error sending message." }
+      ]);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex h-screen w-full">
-      {/* Mobile Backdrop */}
+    <div className="flex h-screen w-full max-w-full overflow-hidden">
+
+      {/* BACKDROP (MOBILE) */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-40 md:hidden transition-opacity"
+          className="fixed inset-0 bg-black/40 z-40 md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
-      {/* Desktop Sidebar (hidden on mobile) */}
+      {/* DESKTOP SIDEBAR */}
       <div className="hidden md:block w-64 h-full flex-shrink-0">
-        <Sidebar onSelectChat={(id) => setChatId(id)} currentChatId={chatId} />
+        <Sidebar
+          onSelectChat={(id) => setChatId(id)}
+          currentChatId={chatId}
+        />
       </div>
 
-      {/* Mobile Sidebar */}
+      {/* MOBILE SIDEBAR */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 z-50 md:hidden transition-transform duration-300 ease-in-out ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed top-0 left-0 h-full w-64 z-50 md:hidden transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
       >
-        <Sidebar onSelectChat={(id) => { setChatId(id); setIsSidebarOpen(false); }} currentChatId={chatId} />
+        <Sidebar
+          onSelectChat={(id) => {
+            setChatId(id);
+            setIsSidebarOpen(false);
+          }}
+          currentChatId={chatId}
+        />
       </div>
 
-      {/* Chat Area */}
+      {/* CHAT AREA */}
       <div className="flex-1 flex flex-col w-full min-w-0">
-        <div className="glass-panel flex w-full items-center px-4 sm:px-6 md:px-8 sticky top-0 z-10 shrink-0" style={{ height: "60px" }}>
+
+        {/* ✅ FIXED HEADER (CHATGPT STYLE) */}
+        <div className="flex items-center h-[56px] px-4 border-b border-[var(--border)] bg-[rgba(14,25,29,0.6)] backdrop-blur-md">
+
+          {/* MENU */}
           <button
-            className="md:hidden mr-4 p-2 text-gray-300 hover:text-white rounded-md transition-colors"
+            className="md:hidden"
             onClick={() => setIsSidebarOpen(true)}
-            aria-label="Open sidebar"
+            style={{
+              fontSize: "20px",
+              marginRight: "12px",
+              background: "transparent",
+              border: "none",
+              color: "var(--text-primary)",
+              cursor: "pointer"
+            }}
           >
-            <span style={{ fontSize: "20px" }}>☰</span>
+            ☰
           </button>
-          <h2 style={{ margin: "0", fontSize: "16px", fontWeight: "600", color: "var(--text-primary)" }} className="flex-1 text-center lg:text-left pr-10 lg:pr-0">
-            {chatId ? "Conversation" : "New Chat"}
+
+          {/* TITLE */}
+          <h2
+            style={{
+              fontSize: "16px",
+              fontWeight: "600",
+              color: "var(--text-primary)"
+            }}
+          >
+            Serenova
           </h2>
+
         </div>
 
-        <div className="flex-1 overflow-y-auto w-full flex flex-col py-5 px-0">
+        {/* CHAT CONTENT */}
+        <div className="flex-1 overflow-y-auto w-full flex flex-col">
+
           {messages.length === 0 && (
-            <div style={styles.empty} className="fade-in delay-200">
-              <div style={styles.emptyIcon}>✨</div>
+            <div
+              className="flex flex-col items-center justify-center h-full text-center"
+              style={{ color: "var(--text-primary)" }}
+            >
+              <div style={{ fontSize: "48px", marginBottom: "16px" }}>✨</div>
               <h2>How can I help you today?</h2>
-              <p style={{ marginTop: "8px", color: "var(--text-muted)", fontSize: "14px" }}>Your secure space for reflection and support.</p>
+              <p style={{ color: "var(--text-muted)", marginTop: "8px" }}>
+                Your secure space for reflection and support.
+              </p>
             </div>
           )}
-          {messages.map((m, i) => {
-            const isUser = m.role === "user";
-            const emotion = m.emotion || m.sentiment?.emotion;
-            const intensity = m.intensity || m.sentiment?.intensity;
-            const topics = m.topics || m.sentiment?.topics;
-            const escalation = m.escalation || m.sentiment?.escalation;
 
-            const EMOTION_EMOJI = {
-              joy: "😊", sadness: "😢", anxious: "😰", anxiety: "😰", anger: "😠",
-              calm: "😌", disgust: "😒", surprise: "😲", neutral: "💬", happy: "🌟", sad: "😔"
-            };
-            const emoji = emotion ? (EMOTION_EMOJI[emotion.toLowerCase()] || "💬") : "";
-
-            return (
-              <div
-                key={i}
-                style={{
-                  ...styles.messageRow,
-                  justifyContent: isUser ? "flex-end" : "flex-start",
-                  flexDirection: "column",
-                  alignItems: isUser ? "flex-end" : "flex-start"
-                }}
-                className="fade-up"
-              >
-                {!isUser && emotion && (
-                  <div style={styles.reasoningBlock}>
-                    <div style={styles.reasoningTitle}>Reasoning</div>
-                    <div style={styles.reasoningContent}>
-                      <div><strong>Emotion:</strong> {emotion} {intensity ? `(${intensity}/10)` : ""}</div>
-                      {topics && topics.length > 0 && <div><strong>Topics:</strong> {Array.isArray(topics) ? topics.join(", ") : topics}</div>}
-                      {escalation && <div><strong>Escalation:</strong> <span style={{ textTransform: "capitalize" }}>{escalation}</span></div>}
-                    </div>
-                  </div>
-                )}
-
-                <div className="max-w-full sm:max-w-md md:max-w-xl lg:max-w-2xl px-2 sm:px-0" style={{
-                  ...styles.messageInner,
-                  ...(isUser ? styles.innerUser : styles.innerBot),
-                  margin: !isUser && emotion ? "8px 0 0 0" : "0"
-                }}>
-                  {!isUser && (
-                    <div style={{ ...styles.avatar, background: "var(--teal-glow)", color: "var(--teal)", border: "1px solid var(--border)" }}>
-                      <img src="/logo.png" alt="Serenova" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
-                    </div>
-                  )}
-
-                  <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                    <div className="text-sm md:text-base lg:text-lg break-words" style={{
-                      ...styles.bubble,
-                      ...(isUser ? styles.bubbleUser : styles.bubbleBot)
-                    }}>
-                      {m.message}
-                    </div>
-
-                    {!isUser && emotion && (
-                      <div style={styles.emotionBadge}>
-                        {emoji} <span style={{ textTransform: "capitalize" }}>{emotion}</span> {intensity ? `${intensity}/10` : ""}
-                      </div>
-                    )}
-                  </div>
-
-                  {isUser && (
-                    <div style={{ ...styles.avatar, background: "rgba(255,255,255,0.1)", color: "var(--text-secondary)" }}>
-                      U
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-          {loading && (
-            <div style={{ ...styles.messageRow, justifyContent: "flex-start" }} className="fade-in">
-              <div style={{ ...styles.messageInner, ...styles.innerBot }}>
-                <div style={{ ...styles.avatar, background: "var(--teal-glow)", color: "var(--teal)", border: "1px solid var(--border)" }}><img src="/logo.png" alt="Serenova" style={{ width: "20px", height: "20px", objectFit: "contain" }} /></div>
-                <div style={{ ...styles.bubble, ...styles.bubbleBot, display: "flex", gap: "6px", alignItems: "center" }}>
-                  <span style={{ ...styles.dot, animationDelay: "0ms" }} />
-                  <span style={{ ...styles.dot, animationDelay: "160ms" }} />
-                  <span style={{ ...styles.dot, animationDelay: "320ms" }} />
-                </div>
-              </div>
-            </div>
-          )}
           <div ref={bottomRef} style={{ height: "30px" }} />
         </div>
 
-        <div className="w-full px-4 sm:px-6 md:px-8 shrink-0 flex flex-col items-center py-5" style={{ background: "linear-gradient(180deg, rgba(14,25,29,0) 0%, rgba(10,16,21,0.8) 100%)" }}>
-          <div className="glass-panel w-full sm:max-w-md md:max-w-2xl lg:max-w-3xl" style={styles.inputWrapper}>
-            <input
-              style={styles.input}
-              placeholder="Send a message..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            />
-            <button
-              style={{ ...styles.sendBtn, opacity: (!input.trim() || loading) ? 0.4 : 1 }}
-              onClick={handleSend}
-              disabled={loading || !input.trim()}
-            >
-              ➤
-            </button>
+        {/* INPUT */}
+        <div className="w-full px-4 sm:px-6 md:px-8 shrink-0 flex flex-col items-center py-5">
+          <div className="glass-panel w-full sm:max-w-md md:max-w-2xl lg:max-w-3xl">
+            <div style={styles.inputWrapper}>
+              <input
+                style={styles.input}
+                placeholder="Send a message..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              />
+              <button
+                style={{
+                  ...styles.sendBtn,
+                  opacity: (!input.trim() || loading) ? 0.4 : 1
+                }}
+                onClick={handleSend}
+                disabled={loading || !input.trim()}
+              >
+                ➤
+              </button>
+            </div>
           </div>
-          <p style={styles.footerText}>Serenova can make mistakes. Please verify important information.</p>
         </div>
+
       </div>
     </div>
   );

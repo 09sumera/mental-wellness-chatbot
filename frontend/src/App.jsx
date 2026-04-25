@@ -154,9 +154,9 @@ export default function App() {
 
   // Wraps views other than ChatWithSidebar in the app layout frame.
   const Layout = ({ children }) => (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh", width: "100%" }}>
+    <div className="w-full max-w-full overflow-hidden" style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <Navbar />
-      <div style={{ flex: 1, overflow: "hidden", display: "flex" }}>
+      <div className="w-full max-w-full" style={{ flex: 1, overflow: "hidden", display: "flex" }}>
         {children}
       </div>
     </div>
