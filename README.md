@@ -1,121 +1,58 @@
-# 🌿 Serenova — Mental Wellness Chatbot
+# AI Mental Health and Wellness Chatbot
 
-**Serenova** is an AI-powered mental wellness chatbot designed to provide a safe, supportive, and intelligent space for users to express their thoughts, emotions, and concerns.
+An AI-powered chatbot designed to support mental wellness by detecting user mood and providing supportive responses.
 
----
+## Features
 
-## 🚀 Problem Statement
+- AI chatbot conversation
+- Sentiment analysis
+- Crisis detection
+- Mood tracking
+- Simple analytics dashboard
 
-Mental health support is often:
+## Tech Stack
 
-* ❌ Expensive
-* ❌ Not accessible 24/7
-* ❌ Stigmatized
+Frontend
+- React
+- HTML / CSS
+- JavaScript
 
-Serenova aims to bridge this gap by offering **real-time, empathetic AI-based conversations**.
+Backend
+- Python Flask
+- REST API
 
----
+AI
+- Sentiment Analysis
+- Crisis Detection
 
-## 💡 Solution
+## Project Structure
 
-Serenova provides:
+mental-wellness-chatbot
+├── frontend
+├── backend
+├── ai
+├── data
+├── docs
+└── tests
 
-* 🧠 Emotion-aware AI responses
-* 💬 Real-time conversational support
-* 🔍 Topic and sentiment detection
-* 🚨 Escalation detection for critical situations
+## Setup Instructions
 
----
+### 1 Install dependencies
 
-## ✨ Features
-
-* 💬 Chat interface (like ChatGPT)
-* 📱 Fully responsive (mobile + desktop)
-* 🧠 Emotion & intensity analysis
-* 📊 Topic detection
-* 🚨 Crisis escalation alerts
-* 🔎 Chat history & search
-* 🌙 Clean dark UI
-
----
-
-## 🛠 Tech Stack
-
-**Frontend**
-
-* React.js
-* Tailwind CSS
-
-**Backend**
-
-* Python (FastAPI / Flask)
-* AI/ML models (NLP)
-
-**Other**
-
-* Vite
-* Git & GitHub
-* Vercel (Deployment)
-
----
-
-## 📸 Screenshots
-
-*(Add screenshots here for better impact)*
-
----
-
-## 🔧 Installation
-
-```bash
-git clone https://github.com/09sumera/mental-wellness-chatbot.git
-cd mental-wellness-chatbot
-```
-
-### Frontend
-
-```bash
 cd frontend
 npm install
-npm run dev
-```
 
-### Backend
+cd backend
+pip install -r requirements.txt
 
-```bash
+### 2 Run the application
+
+Start backend:
 cd backend
 python app.py
-```
 
----
+Start frontend:
+cd frontend
+npm run dev
 
-## 🌍 Live Demo
-
-*(Add your deployed link here)*
-
----
-
-## 🎯 Future Improvements
-
-* 🎙 Voice-based interaction
-* 📊 Mood tracking dashboard
-* 🤝 Therapist integration
-* 🔐 User authentication
-* 🧩 Personalized recommendations
-
----
-
-## 👩‍💻 Author
-
-**Sumera Anjum**
-
----
-
-## ⚠️ Disclaimer
-
-Serenova is not a substitute for professional medical advice.
-If you are in crisis, please seek help from a qualified professional.
-
----
-
-✨ *“Where your mind finds peace.”*
+Open http://localhost:5173 in your browser.

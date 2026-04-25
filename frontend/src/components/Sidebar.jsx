@@ -266,8 +266,9 @@ export default function Sidebar({ onSelectChat, currentChatId }) {
 
 const styles = {
   sidebar: {
-    // Width handled via Tailwind classes for responsiveness
-    background: "rgba(10, 16, 21, 0.4)",
+    width: "100%",
+    height: "100%",
+    background: "#0a1015",
     display: "flex",
     flexDirection: "column",
     padding: "20px 16px",
@@ -277,7 +278,7 @@ const styles = {
     borderLeft: "none",
     borderRadius: 0,
     boxShadow: "none",
-    borderRight: "1px solid var(--border)"
+    borderRight: "1px solid rgba(255,255,255,0.05)"
   },
   brandBox: {
     display: "flex",
@@ -308,9 +309,9 @@ const styles = {
     alignItems: "center",
     gap: "8px",
     background: "rgba(255,255,255,0.05)",
-    border: "1px solid var(--border)",
-    borderRadius: "var(--radius-sm)",
-    padding: "8px 12px",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
+    borderRadius: "20px",
+    padding: "8px 16px",
     marginBottom: "12px",
   },
   searchIcon: {
@@ -339,7 +340,9 @@ const styles = {
     justifyContent: "flex-start",
     marginBottom: "20px",
     padding: "12px 16px",
-    borderRadius: "var(--radius-md)",
+    borderRadius: "20px",
+    background: "rgba(255, 255, 255, 0.05)",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
   },
   list: {
     display: "flex",

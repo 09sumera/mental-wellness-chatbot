@@ -61,6 +61,7 @@ export default function ChatWithSidebar() {
   };
 
   return (
+<<<<<<< HEAD
     <div className="flex h-screen w-full max-w-full overflow-hidden">
 
       {/* BACKDROP (MOBILE) */}
@@ -110,9 +111,32 @@ export default function ChatWithSidebar() {
               color: "var(--text-primary)",
               cursor: "pointer"
             }}
+=======
+    <div className="app-container">
+      {/* Mobile Backdrop */}
+      <div 
+        className={`mobile-backdrop ${isSidebarOpen ? "open" : ""}`}
+        onClick={() => setIsSidebarOpen(false)}
+      />
+
+      {/* Sidebar Container */}
+      <div className={`sidebar-container ${isSidebarOpen ? "open" : ""}`}>
+        <Sidebar onSelectChat={(id) => { setChatId(id); setIsSidebarOpen(false); }} currentChatId={chatId} />
+      </div>
+      
+      {/* Chat Area */}
+      <div className="main-content">
+        <div className="glass-panel flex w-full items-center px-4 sm:px-6 md:px-8 sticky top-0 z-10 shrink-0" style={{ height: "60px", borderTop: "none", borderLeft: "none", borderRight: "none", borderRadius: "0", justifyContent: "center" }}>
+          <button 
+            className="mobile-menu-btn"
+            onClick={() => setIsSidebarOpen(true)}
+            aria-label="Open sidebar"
+            style={{ position: "absolute", left: "16px" }}
+>>>>>>> 76cd082 (Update README with authentication and improvements)
           >
             ☰
           </button>
+<<<<<<< HEAD
 
           <h2
             style={{
@@ -122,9 +146,14 @@ export default function ChatWithSidebar() {
             }}
           >
             Serenova
+=======
+          <h2 className="chat-header" style={{ display: "flex", alignItems: "center", gap: "8px", justifyContent: "center" }}>
+            <span style={{ fontSize: "18px" }}>📝</span> {chatId ? "Conversation" : "New Chat"}
+>>>>>>> 76cd082 (Update README with authentication and improvements)
           </h2>
 
         </div>
+<<<<<<< HEAD
 
         {/* CHAT CONTENT */}
         <div className="flex-1 overflow-y-auto w-full flex flex-col">
@@ -143,6 +172,125 @@ export default function ChatWithSidebar() {
           )}
 
           <div ref={bottomRef} style={{ height: "30px" }} />
+=======
+        
+        <div className="flex-1 overflow-y-auto w-full flex flex-col py-5 px-0">
+          {messages.length === 0 && (
+            <div style={styles.empty} className="fade-in delay-200">
+              <div style={styles.emptyIcon}>
+                <span style={{ fontSize: "56px", filter: "drop-shadow(0 0 10px rgba(242, 201, 126, 0.4))", color: "var(--sand)" }}>✨</span>
+              </div>
+              <h2 style={{ fontFamily: "var(--font-display)", fontWeight: "600", fontSize: "28px" }}>How can I help you today?</h2>
+              <p style={{marginTop: "8px", color: "var(--text-muted)", fontSize: "14px"}}>Your secure space for reflection and support.</p>
+            </div>
+          )}
+          {messages.map((m, i) => {
+            const isUser = m.role === "user";
+            const emotion = m.emotion || m.sentiment?.emotion;
+            const intensity = m.intensity || m.sentiment?.intensity;
+            const topics = m.topics || m.sentiment?.topics;
+            const escalation = m.escalation || m.sentiment?.escalation;
+            
+            const EMOTION_EMOJI = {
+                joy: "😊", sadness: "😢", anxious: "😰", anxiety: "😰", anger: "😠",
+                calm: "😌", disgust: "😒", surprise: "😲", neutral: "💬", happy: "🌟", sad: "😔"
+            };
+            const emoji = emotion ? (EMOTION_EMOJI[emotion.toLowerCase()] || "💬") : "";
+
+            return (
+              <div 
+                key={i} 
+                style={{
+                  ...styles.messageRow, 
+                  justifyContent: isUser ? "flex-end" : "flex-start",
+                  flexDirection: "column",
+                  alignItems: isUser ? "flex-end" : "flex-start"
+                }}
+                className="fade-up"
+              >
+                {!isUser && emotion && (
+                  <div style={styles.reasoningBlock}>
+                    <div style={styles.reasoningTitle}>Reasoning</div>
+                    <div style={styles.reasoningContent}>
+                      <div><strong>Emotion:</strong> {emotion} {intensity ? `(${intensity}/10)` : ""}</div>
+                      {topics && topics.length > 0 && <div><strong>Topics:</strong> {Array.isArray(topics) ? topics.join(", ") : topics}</div>}
+                      {escalation && <div><strong>Escalation:</strong> <span style={{ textTransform: "capitalize" }}>{escalation}</span></div>}
+                    </div>
+                  </div>
+                )}
+
+                <div className="max-w-full sm:max-w-md md:max-w-xl lg:max-w-2xl px-2 sm:px-0" style={{
+                    ...styles.messageInner,
+                    ...(isUser ? styles.innerUser : styles.innerBot),
+                    margin: !isUser && emotion ? "8px 0 0 0" : "0"
+                }}>
+                  {!isUser && (
+                    <div style={{...styles.avatar, background: "var(--teal-glow)", color: "var(--teal)", border: "1px solid var(--border)"}}>
+                      <img src="/logo.png" alt="Serenova" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
+                    </div>
+                  )}
+                  
+                  <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                    <div className="text-sm md:text-base lg:text-lg break-words" style={{
+                        ...styles.bubble,
+                        ...(isUser ? styles.bubbleUser : styles.bubbleBot)
+                    }}>
+                      {m.message}
+                    </div>
+
+                    {!isUser && emotion && (
+                        <div style={styles.emotionBadge}>
+                           {emoji} <span style={{ textTransform: "capitalize" }}>{emotion}</span> {intensity ? `${intensity}/10` : ""}
+                        </div>
+                    )}
+                  </div>
+
+                  {isUser && (
+                    <div style={{...styles.avatar, background: "rgba(255,255,255,0.1)", color: "var(--text-secondary)"}}>
+                      U
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+          {loading && (
+            <div style={{...styles.messageRow, justifyContent: "flex-start"}} className="fade-in">
+              <div style={{...styles.messageInner, ...styles.innerBot}}>
+                <div style={{...styles.avatar, background: "var(--teal-glow)", color: "var(--teal)", border: "1px solid var(--border)"}}><img src="/logo.png" alt="Serenova" style={{ width: "20px", height: "20px", objectFit: "contain" }} /></div>
+                <div style={{...styles.bubble, ...styles.bubbleBot, display: "flex", gap: "6px", alignItems: "center"}}>
+                   <span style={{...styles.dot, animationDelay: "0ms"}} />
+                   <span style={{...styles.dot, animationDelay: "160ms"}} />
+                   <span style={{...styles.dot, animationDelay: "320ms"}} />
+                </div>
+              </div>
+            </div>
+          )}
+          <div ref={bottomRef} style={{height: "30px"}} />
+        </div>
+
+        <div className="w-full px-4 sm:px-6 md:px-8 shrink-0 flex flex-col items-center py-5" style={{ background: "linear-gradient(180deg, rgba(14,25,29,0) 0%, rgba(10,16,21,0.8) 100%)" }}>
+          <div style={styles.inputContainer}>
+            <input
+              style={styles.inputField}
+              placeholder="Send a message..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            />
+            <button 
+              style={{...styles.sendBtn, opacity: (!input.trim() || loading) ? 0.4 : 1}} 
+              onClick={handleSend} 
+              disabled={loading || !input.trim()}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: "rotate(45deg)", marginLeft: "-2px" }}>
+                 <line x1="22" y1="2" x2="11" y2="13"></line>
+                 <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
+          <p style={styles.footerText}>Serenova can make mistakes. Please verify important information.</p>
+>>>>>>> 76cd082 (Update README with authentication and improvements)
         </div>
 
         {/* INPUT + FOOTER */}
@@ -242,6 +390,7 @@ const styles = {
     fontWeight: 500,
   },
   bubbleBot: {
+<<<<<<< HEAD
     background: "var(--bg-input)",
     color: "var(--text-primary)",
     borderBottomLeftRadius: "4px",
@@ -249,18 +398,30 @@ const styles = {
     backdropFilter: "blur(10px)",
   },
   inputWrapper: {
+=======
+      background: "var(--bg-input)",
+      color: "var(--text-primary)",
+      borderBottomLeftRadius: "4px",
+      border: "1px solid var(--border)",
+      backdropFilter: "blur(10px)",
+  },
+  inputContainer: {
+>>>>>>> 76cd082 (Update README with authentication and improvements)
     width: "100%",
-    // maxWidth handled via responsive classes
+    maxWidth: "800px",
     position: "relative",
     display: "flex",
     alignItems: "center",
-    borderRadius: "24px",
-    marginBottom: "8px",
+    background: "rgba(18, 28, 34, 0.8)",
+    border: "1px solid rgba(255, 255, 255, 0.05)",
+    borderRadius: "30px",
+    marginBottom: "12px",
     padding: "4px",
+    boxShadow: "0 8px 24px rgba(0, 0, 0, 0.2)",
   },
-  input: {
+  inputField: {
     flex: 1,
-    padding: "16px 48px 16px 20px",
+    padding: "14px 50px 14px 24px",
     background: "transparent",
     color: "var(--text-primary)",
     fontSize: "15px",
@@ -271,8 +432,8 @@ const styles = {
   sendBtn: {
     position: "absolute",
     right: "8px",
-    width: "40px",
-    height: "40px",
+    width: "42px",
+    height: "42px",
     borderRadius: "50%",
     background: "linear-gradient(135deg, var(--teal), #35b3aa)",
     color: "#0a1015",
