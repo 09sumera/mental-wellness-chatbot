@@ -10,6 +10,7 @@ export default function ChatWithSidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const bottomRef = useRef(null);
 
+  // Load selected conversation history
   useEffect(() => {
     if (chatId) {
       chatAPI.getConversation(chatId)
@@ -51,70 +52,16 @@ export default function ChatWithSidebar() {
         setChatId(res.chat_id);
       }
     } catch (e) {
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", message: "Error sending message." }
-      ]);
+      setMessages((prev) => [...prev, { role: "assistant", message: "Error sending message." }]);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-<<<<<<< HEAD
-    <div className="flex h-screen w-full max-w-full overflow-hidden">
-
-      {/* BACKDROP (MOBILE) */}
-      {isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-40 md:hidden"
-          onClick={() => setIsSidebarOpen(false)}
-        />
-      )}
-
-      {/* DESKTOP SIDEBAR */}
-      <div className="hidden md:block w-64 h-full flex-shrink-0">
-        <Sidebar
-          onSelectChat={(id) => setChatId(id)}
-          currentChatId={chatId}
-        />
-      </div>
-
-      {/* MOBILE SIDEBAR */}
-      <div
-        className={`fixed top-0 left-0 h-full w-64 z-50 md:hidden transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
-      >
-        <Sidebar
-          onSelectChat={(id) => {
-            setChatId(id);
-            setIsSidebarOpen(false);
-          }}
-          currentChatId={chatId}
-        />
-      </div>
-
-      {/* CHAT AREA */}
-      <div className="flex-1 flex flex-col w-full min-w-0">
-
-        {/* HEADER */}
-        <div className="flex items-center h-[56px] px-4 border-b border-[var(--border)] bg-[rgba(14,25,29,0.6)] backdrop-blur-md">
-
-          <button
-            className="md:hidden"
-            onClick={() => setIsSidebarOpen(true)}
-            style={{
-              fontSize: "20px",
-              marginRight: "12px",
-              background: "transparent",
-              border: "none",
-              color: "var(--text-primary)",
-              cursor: "pointer"
-            }}
-=======
     <div className="app-container">
       {/* Mobile Backdrop */}
-      <div 
+      <div
         className={`mobile-backdrop ${isSidebarOpen ? "open" : ""}`}
         onClick={() => setIsSidebarOpen(false)}
       />
@@ -123,57 +70,25 @@ export default function ChatWithSidebar() {
       <div className={`sidebar-container ${isSidebarOpen ? "open" : ""}`}>
         <Sidebar onSelectChat={(id) => { setChatId(id); setIsSidebarOpen(false); }} currentChatId={chatId} />
       </div>
-      
+
       {/* Chat Area */}
       <div className="main-content">
         <div className="glass-panel flex w-full items-center px-4 sm:px-6 md:px-8 sticky top-0 z-10 shrink-0" style={{ height: "60px", borderTop: "none", borderLeft: "none", borderRight: "none", borderRadius: "0", justifyContent: "center" }}>
-          <button 
+          <button
             className="mobile-menu-btn"
             onClick={() => setIsSidebarOpen(true)}
             aria-label="Open sidebar"
             style={{ position: "absolute", left: "16px" }}
->>>>>>> 76cd082 (Update README with authentication and improvements)
           >
-            ☰
+            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
           </button>
-<<<<<<< HEAD
-
-          <h2
-            style={{
-              fontSize: "16px",
-              fontWeight: "600",
-              color: "var(--text-primary)"
-            }}
-          >
-            Serenova
-=======
           <h2 className="chat-header" style={{ display: "flex", alignItems: "center", gap: "8px", justifyContent: "center" }}>
             <span style={{ fontSize: "18px" }}>📝</span> {chatId ? "Conversation" : "New Chat"}
->>>>>>> 76cd082 (Update README with authentication and improvements)
           </h2>
-
         </div>
-<<<<<<< HEAD
 
-        {/* CHAT CONTENT */}
-        <div className="flex-1 overflow-y-auto w-full flex flex-col">
-
-          {messages.length === 0 && (
-            <div
-              className="flex flex-col items-center justify-center h-full text-center"
-              style={{ color: "var(--text-primary)" }}
-            >
-              <div style={{ fontSize: "48px", marginBottom: "16px" }}>✨</div>
-              <h2>How can I help you today?</h2>
-              <p style={{ color: "var(--text-muted)", marginTop: "8px" }}>
-                Your secure space for reflection and support.
-              </p>
-            </div>
-          )}
-
-          <div ref={bottomRef} style={{ height: "30px" }} />
-=======
-        
         <div className="flex-1 overflow-y-auto w-full flex flex-col py-5 px-0">
           {messages.length === 0 && (
             <div style={styles.empty} className="fade-in delay-200">
@@ -181,7 +96,7 @@ export default function ChatWithSidebar() {
                 <span style={{ fontSize: "56px", filter: "drop-shadow(0 0 10px rgba(242, 201, 126, 0.4))", color: "var(--sand)" }}>✨</span>
               </div>
               <h2 style={{ fontFamily: "var(--font-display)", fontWeight: "600", fontSize: "28px" }}>How can I help you today?</h2>
-              <p style={{marginTop: "8px", color: "var(--text-muted)", fontSize: "14px"}}>Your secure space for reflection and support.</p>
+              <p style={{ marginTop: "8px", color: "var(--text-muted)", fontSize: "14px" }}>Your secure space for reflection and support.</p>
             </div>
           )}
           {messages.map((m, i) => {
@@ -190,18 +105,18 @@ export default function ChatWithSidebar() {
             const intensity = m.intensity || m.sentiment?.intensity;
             const topics = m.topics || m.sentiment?.topics;
             const escalation = m.escalation || m.sentiment?.escalation;
-            
+
             const EMOTION_EMOJI = {
-                joy: "😊", sadness: "😢", anxious: "😰", anxiety: "😰", anger: "😠",
-                calm: "😌", disgust: "😒", surprise: "😲", neutral: "💬", happy: "🌟", sad: "😔"
+              joy: "😊", sadness: "😢", anxious: "😰", anxiety: "😰", anger: "😠",
+              calm: "😌", disgust: "😒", surprise: "😲", neutral: "💬", happy: "🌟", sad: "😔"
             };
             const emoji = emotion ? (EMOTION_EMOJI[emotion.toLowerCase()] || "💬") : "";
 
             return (
-              <div 
-                key={i} 
+              <div
+                key={i}
                 style={{
-                  ...styles.messageRow, 
+                  ...styles.messageRow,
                   justifyContent: isUser ? "flex-end" : "flex-start",
                   flexDirection: "column",
                   alignItems: isUser ? "flex-end" : "flex-start"
@@ -220,33 +135,33 @@ export default function ChatWithSidebar() {
                 )}
 
                 <div className="max-w-full sm:max-w-md md:max-w-xl lg:max-w-2xl px-2 sm:px-0" style={{
-                    ...styles.messageInner,
-                    ...(isUser ? styles.innerUser : styles.innerBot),
-                    margin: !isUser && emotion ? "8px 0 0 0" : "0"
+                  ...styles.messageInner,
+                  ...(isUser ? styles.innerUser : styles.innerBot),
+                  margin: !isUser && emotion ? "8px 0 0 0" : "0"
                 }}>
                   {!isUser && (
-                    <div style={{...styles.avatar, background: "var(--teal-glow)", color: "var(--teal)", border: "1px solid var(--border)"}}>
+                    <div style={{ ...styles.avatar, background: "var(--teal-glow)", color: "var(--teal)", border: "1px solid var(--border)" }}>
                       <img src="/logo.png" alt="Serenova" style={{ width: "20px", height: "20px", objectFit: "contain" }} />
                     </div>
                   )}
-                  
+
                   <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                     <div className="text-sm md:text-base lg:text-lg break-words" style={{
-                        ...styles.bubble,
-                        ...(isUser ? styles.bubbleUser : styles.bubbleBot)
+                      ...styles.bubble,
+                      ...(isUser ? styles.bubbleUser : styles.bubbleBot)
                     }}>
                       {m.message}
                     </div>
 
                     {!isUser && emotion && (
-                        <div style={styles.emotionBadge}>
-                           {emoji} <span style={{ textTransform: "capitalize" }}>{emotion}</span> {intensity ? `${intensity}/10` : ""}
-                        </div>
+                      <div style={styles.emotionBadge}>
+                        {emoji} <span style={{ textTransform: "capitalize" }}>{emotion}</span> {intensity ? `${intensity}/10` : ""}
+                      </div>
                     )}
                   </div>
 
                   {isUser && (
-                    <div style={{...styles.avatar, background: "rgba(255,255,255,0.1)", color: "var(--text-secondary)"}}>
+                    <div style={{ ...styles.avatar, background: "rgba(255,255,255,0.1)", color: "var(--text-secondary)" }}>
                       U
                     </div>
                   )}
@@ -255,18 +170,18 @@ export default function ChatWithSidebar() {
             );
           })}
           {loading && (
-            <div style={{...styles.messageRow, justifyContent: "flex-start"}} className="fade-in">
-              <div style={{...styles.messageInner, ...styles.innerBot}}>
-                <div style={{...styles.avatar, background: "var(--teal-glow)", color: "var(--teal)", border: "1px solid var(--border)"}}><img src="/logo.png" alt="Serenova" style={{ width: "20px", height: "20px", objectFit: "contain" }} /></div>
-                <div style={{...styles.bubble, ...styles.bubbleBot, display: "flex", gap: "6px", alignItems: "center"}}>
-                   <span style={{...styles.dot, animationDelay: "0ms"}} />
-                   <span style={{...styles.dot, animationDelay: "160ms"}} />
-                   <span style={{...styles.dot, animationDelay: "320ms"}} />
+            <div style={{ ...styles.messageRow, justifyContent: "flex-start" }} className="fade-in">
+              <div style={{ ...styles.messageInner, ...styles.innerBot }}>
+                <div style={{ ...styles.avatar, background: "var(--teal-glow)", color: "var(--teal)", border: "1px solid var(--border)" }}><img src="/logo.png" alt="Serenova" style={{ width: "20px", height: "20px", objectFit: "contain" }} /></div>
+                <div style={{ ...styles.bubble, ...styles.bubbleBot, display: "flex", gap: "6px", alignItems: "center" }}>
+                  <span style={{ ...styles.dot, animationDelay: "0ms" }} />
+                  <span style={{ ...styles.dot, animationDelay: "160ms" }} />
+                  <span style={{ ...styles.dot, animationDelay: "320ms" }} />
                 </div>
               </div>
             </div>
           )}
-          <div ref={bottomRef} style={{height: "30px"}} />
+          <div ref={bottomRef} style={{ height: "30px" }} />
         </div>
 
         <div className="w-full px-4 sm:px-6 md:px-8 shrink-0 flex flex-col items-center py-5" style={{ background: "linear-gradient(180deg, rgba(14,25,29,0) 0%, rgba(10,16,21,0.8) 100%)" }}>
@@ -278,65 +193,24 @@ export default function ChatWithSidebar() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSend()}
             />
-            <button 
-              style={{...styles.sendBtn, opacity: (!input.trim() || loading) ? 0.4 : 1}} 
-              onClick={handleSend} 
+            <button
+              style={{ ...styles.sendBtn, opacity: (!input.trim() || loading) ? 0.4 : 1 }}
+              onClick={handleSend}
               disabled={loading || !input.trim()}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: "rotate(45deg)", marginLeft: "-2px" }}>
-                 <line x1="22" y1="2" x2="11" y2="13"></line>
-                 <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
               </svg>
             </button>
           </div>
           <p style={styles.footerText}>Serenova can make mistakes. Please verify important information.</p>
->>>>>>> 76cd082 (Update README with authentication and improvements)
         </div>
-
-        {/* INPUT + FOOTER */}
-        <div className="w-full px-4 sm:px-6 md:px-8 shrink-0 flex flex-col items-center py-5">
-
-          <div className="glass-panel w-full sm:max-w-md md:max-w-2xl lg:max-w-3xl">
-            <div style={styles.inputWrapper}>
-              <input
-                style={styles.input}
-                placeholder="Send a message..."
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSend()}
-              />
-              <button
-                style={{
-                  ...styles.sendBtn,
-                  opacity: (!input.trim() || loading) ? 0.4 : 1
-                }}
-                onClick={handleSend}
-                disabled={loading || !input.trim()}
-              >
-                ➤
-              </button>
-            </div>
-          </div>
-
-          {/* ✅ FOOTER BACK */}
-          <p
-            style={{
-              fontSize: "12px",
-              color: "var(--text-muted)",
-              textAlign: "center",
-              marginTop: "8px",
-              opacity: 0.7
-            }}
-          >
-            Serenova can make mistakes. Please verify important information.
-          </p>
-
-        </div>
-
       </div>
     </div>
   );
 }
+
 const styles = {
   empty: {
     margin: "auto",
@@ -390,23 +264,13 @@ const styles = {
     fontWeight: 500,
   },
   bubbleBot: {
-<<<<<<< HEAD
     background: "var(--bg-input)",
     color: "var(--text-primary)",
     borderBottomLeftRadius: "4px",
     border: "1px solid var(--border)",
     backdropFilter: "blur(10px)",
   },
-  inputWrapper: {
-=======
-      background: "var(--bg-input)",
-      color: "var(--text-primary)",
-      borderBottomLeftRadius: "4px",
-      border: "1px solid var(--border)",
-      backdropFilter: "blur(10px)",
-  },
   inputContainer: {
->>>>>>> 76cd082 (Update README with authentication and improvements)
     width: "100%",
     maxWidth: "800px",
     position: "relative",
