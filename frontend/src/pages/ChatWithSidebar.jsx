@@ -96,10 +96,9 @@ export default function ChatWithSidebar() {
       {/* CHAT AREA */}
       <div className="flex-1 flex flex-col w-full min-w-0">
 
-        {/* ✅ FIXED HEADER (CHATGPT STYLE) */}
+        {/* HEADER */}
         <div className="flex items-center h-[56px] px-4 border-b border-[var(--border)] bg-[rgba(14,25,29,0.6)] backdrop-blur-md">
 
-          {/* MENU */}
           <button
             className="md:hidden"
             onClick={() => setIsSidebarOpen(true)}
@@ -115,7 +114,6 @@ export default function ChatWithSidebar() {
             ☰
           </button>
 
-          {/* TITLE */}
           <h2
             style={{
               fontSize: "16px",
@@ -147,8 +145,9 @@ export default function ChatWithSidebar() {
           <div ref={bottomRef} style={{ height: "30px" }} />
         </div>
 
-        {/* INPUT */}
+        {/* INPUT + FOOTER */}
         <div className="w-full px-4 sm:px-6 md:px-8 shrink-0 flex flex-col items-center py-5">
+
           <div className="glass-panel w-full sm:max-w-md md:max-w-2xl lg:max-w-3xl">
             <div style={styles.inputWrapper}>
               <input
@@ -170,13 +169,26 @@ export default function ChatWithSidebar() {
               </button>
             </div>
           </div>
+
+          {/* ✅ FOOTER BACK */}
+          <p
+            style={{
+              fontSize: "12px",
+              color: "var(--text-muted)",
+              textAlign: "center",
+              marginTop: "8px",
+              opacity: 0.7
+            }}
+          >
+            Serenova can make mistakes. Please verify important information.
+          </p>
+
         </div>
 
       </div>
     </div>
   );
 }
-
 const styles = {
   empty: {
     margin: "auto",
