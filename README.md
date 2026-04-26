@@ -131,7 +131,6 @@ If you are in distress, please seek help from a qualified professional.
 ## 🌟 Future Improvements
 
 * 🎙 Voice interaction
-* 📊 Mood tracking dashboard
 * 🌍 Multi-language support
 * 🔐 OAuth login (Google / GitHub)
 
